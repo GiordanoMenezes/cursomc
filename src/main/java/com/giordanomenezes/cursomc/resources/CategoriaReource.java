@@ -5,6 +5,9 @@
  */
 package com.giordanomenezes.cursomc.resources;
 
+import com.giordanomenezes.cursomc.domain.Categoria;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoriaReource {
     
     @GetMapping
-    public String listar() {
-        return "O REST está funcionando!!!";
+    public List<Categoria> listar() {
+        
+        Categoria cat1 = new Categoria(1,"Informática");
+        Categoria cat2 = new Categoria(2,"Escritório");
+        
+        List<Categoria> listacat = new ArrayList<>();
+        
+        listacat.add(cat1);
+        listacat.add(cat2);
+        
+        return listacat;
     }
 }
