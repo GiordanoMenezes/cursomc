@@ -5,6 +5,7 @@
  */
 package com.giordanomenezes.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class Produto implements Serializable {
 
     private BigDecimal preco;
     
+    @JsonBackReference
     @ManyToMany
     @JoinTable(name="PRODUTO_CATEGORIA",joinColumns = @JoinColumn(name = "produto_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id"))
