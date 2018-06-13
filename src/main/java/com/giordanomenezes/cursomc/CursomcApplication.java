@@ -2,10 +2,14 @@ package com.giordanomenezes.cursomc;
 
 import com.giordanomenezes.cursomc.domain.Categoria;
 import com.giordanomenezes.cursomc.domain.Cidade;
+import com.giordanomenezes.cursomc.domain.Cliente;
+import com.giordanomenezes.cursomc.domain.Endereco;
 import com.giordanomenezes.cursomc.domain.Estado;
 import com.giordanomenezes.cursomc.domain.Produto;
+import com.giordanomenezes.cursomc.domain.enums.TipoCliente;
 import com.giordanomenezes.cursomc.repositories.CategoriaRepository;
 import com.giordanomenezes.cursomc.repositories.CidadeRepository;
+import com.giordanomenezes.cursomc.repositories.ClienteRepository;
 import com.giordanomenezes.cursomc.repositories.ProdutoRepository;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -27,6 +31,10 @@ public class CursomcApplication implements CommandLineRunner {
 
     @Autowired
     private CidadeRepository cidaderepo;
+    
+    @Autowired
+    private ClienteRepository clienterepo;
+
 
     public static void main(String[] args) {
         SpringApplication.run(CursomcApplication.class, args);
@@ -68,6 +76,18 @@ public class CursomcApplication implements CommandLineRunner {
         cidaderepo.save(c1);
         cidaderepo.save(c2);
         cidaderepo.save(c3);
+        
+        //CLIENTES e ENDEREÇOS
+        
+        Cliente cli1 = new Cliente("Maria Silva","maria@gmail.com","36378912377",TipoCliente.PF);
+        cli1.getTelefones().addAll(Arrays.asList("27363323","93838393"));
+        
+        Endereco end1 = new Endereco(null,"Rua das Flores","300","Apto 203","Jardim Europa","38220834",cli1,c1);
+        Endereco end2 = new Endereco(null,"Avenida Matos","105","Sala 800","Centro","38777012",cli1,c1);
+        
+        cli1.getEnderecos().addAll(Arrays.asList(end1,end2));
+        
+        clienterepo.save(cli1);
 
     }
 }
