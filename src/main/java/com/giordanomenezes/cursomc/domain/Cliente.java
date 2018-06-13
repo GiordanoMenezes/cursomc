@@ -5,6 +5,7 @@
  */
 package com.giordanomenezes.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.giordanomenezes.cursomc.domain.enums.TipoCliente;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class Cliente implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipoCliente tipo;
     
+    @JsonManagedReference
     @OneToMany(mappedBy = "cliente",cascade = CascadeType.ALL)
     private List<Endereco> enderecos = new ArrayList<>();
     

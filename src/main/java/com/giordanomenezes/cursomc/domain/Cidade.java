@@ -5,6 +5,7 @@
  */
 package com.giordanomenezes.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -27,6 +28,7 @@ public class Cidade implements Serializable {
 	private Integer id;
 	private String nome;
 	
+        @JsonManagedReference
 	@ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH,CascadeType.DETACH})
 	@JoinColumn(name="estado_id")
 	private Estado estado;

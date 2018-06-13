@@ -5,8 +5,8 @@
  */
 package com.giordanomenezes.cursomc.resources;
 
-import com.giordanomenezes.cursomc.domain.Categoria;
-import com.giordanomenezes.cursomc.services.CategoriaService;
+import com.giordanomenezes.cursomc.domain.Cliente;
+import com.giordanomenezes.cursomc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Giordano
  */
 @RestController
-@RequestMapping(value = "/categorias")
-public class CategoriaReource {
+@RequestMapping(value = "/clientes")
+public class ClienteResource {
     
     @Autowired
-    private CategoriaService service;
+    private ClienteService service;
     
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> buscarporId(@PathVariable Long id) {
-        Categoria catfind =  service.buscarporId(id);
+        Cliente catfind =  service.buscarporId(id);
         return ResponseEntity.ok().body(catfind);
     }
 }

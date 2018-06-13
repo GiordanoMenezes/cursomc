@@ -5,6 +5,7 @@
  */
 package com.giordanomenezes.cursomc.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -38,6 +39,7 @@ public class Endereco implements Serializable {
     
     private String cep;
     
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
