@@ -5,11 +5,17 @@ import com.giordanomenezes.cursomc.domain.Cidade;
 import com.giordanomenezes.cursomc.domain.Cliente;
 import com.giordanomenezes.cursomc.domain.Endereco;
 import com.giordanomenezes.cursomc.domain.Estado;
+import com.giordanomenezes.cursomc.domain.Pagamento;
+import com.giordanomenezes.cursomc.domain.PagamentoComBoleto;
+import com.giordanomenezes.cursomc.domain.PagamentoComCartao;
+import com.giordanomenezes.cursomc.domain.Pedido;
 import com.giordanomenezes.cursomc.domain.Produto;
+import com.giordanomenezes.cursomc.domain.enums.EstadoPagamento;
 import com.giordanomenezes.cursomc.domain.enums.TipoCliente;
 import com.giordanomenezes.cursomc.repositories.CategoriaRepository;
 import com.giordanomenezes.cursomc.repositories.CidadeRepository;
 import com.giordanomenezes.cursomc.repositories.ClienteRepository;
+import com.giordanomenezes.cursomc.repositories.PagamentoRepository;
 import com.giordanomenezes.cursomc.repositories.ProdutoRepository;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -18,11 +24,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
+import com.giordanomenezes.cursomc.repositories.PedidoRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
 
 @SpringBootApplication
 public class CursomcApplication implements CommandLineRunner {
 
-    
     @Autowired
     private CategoriaRepository catrepo;
 
@@ -31,10 +41,15 @@ public class CursomcApplication implements CommandLineRunner {
 
     @Autowired
     private CidadeRepository cidaderepo;
-    
+
     @Autowired
     private ClienteRepository clienterepo;
 
+    @Autowired
+    private PedidoRepository pedrepo;
+
+    @Autowired
+    private PagamentoRepository pagtorepo;
 
     public static void main(String[] args) {
         SpringApplication.run(CursomcApplication.class, args);
@@ -70,24 +85,35 @@ public class CursomcApplication implements CommandLineRunner {
         Cidade c3 = new Cidade(null, "Campinas", e2);
 
         e1.getCidades().add(c1);
-        e2.getCidades().addAll(Arrays.asList(c2,c3));
+        e2.getCidades().addAll(Arrays.asList(c2, c3));
 
         //pelo cascade, e1 tambem será salvo.
         cidaderepo.save(c1);
         cidaderepo.save(c2);
         cidaderepo.save(c3);
-        
+
         //CLIENTES e ENDEREÇOS
-        
-        Cliente cli1 = new Cliente("Maria Silva","maria@gmail.com","36378912377",TipoCliente.PF);
-        cli1.getTelefones().addAll(Arrays.asList("27363323","93838393"));
-        
-        Endereco end1 = new Endereco(null,"Rua das Flores","300","Apto 203","Jardim Europa","38220834",cli1,c1);
-        Endereco end2 = new Endereco(null,"Avenida Matos","105","Sala 800","Centro","38777012",cli1,c1);
-        
-        cli1.getEnderecos().addAll(Arrays.asList(end1,end2));
-        
+        Cliente cli1 = new Cliente("Maria Silva", "maria@gmail.com", "36378912377", TipoCliente.PF);
+        cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+
+        Endereco end1 = new Endereco(null, "Rua das Flores", "300", "Apto 203", "Jardim Europa", "38220834", cli1, c1);
+        Endereco end2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "38777012", cli1, c1);
+
+        cli1.getEnderecos().addAll(Arrays.asList(end1, end2));
+
         clienterepo.save(cli1);
+        
+        //PEDIDOS E PAGAMENTOS
+        Pedido ped1 = new Pedido(LocalDateTime.of(2017,Month.SEPTEMBER,30,10,32), cli1, end1);
+        Pedido ped2 = new Pedido(LocalDateTime.of(2017,Month.OCTOBER,10,19,35), cli1, end2);
+        
+        Pagamento pagto1 = new PagamentoComCartao(6, EstadoPagamento.QUIT, ped1);
+        Pagamento pagto2 = new PagamentoComBoleto(LocalDate.of(2017,Month.OCTOBER,20),null,EstadoPagamento.PEND,ped2);
+        
+        pedrepo.save(ped1);
+        pedrepo.save(ped2);
+        pagtorepo.save(pagto1);
+        pagtorepo.save(pagto2);
 
     }
 }
