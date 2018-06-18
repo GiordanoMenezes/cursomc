@@ -7,7 +7,9 @@ package com.giordanomenezes.cursomc.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +18,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -43,6 +46,9 @@ public class Pedido implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
     private Pagamento pagamento;
+    
+    @OneToMany(mappedBy = "id.pedido",cascade = CascadeType.ALL)
+    private Set<ItemPedido> itens = new HashSet<>();
 
     public Pedido() {
     }
@@ -92,6 +98,23 @@ public class Pedido implements Serializable {
     public void setPagamento(Pagamento pagamento) {
         this.pagamento = pagamento;
     }
+
+    public Set<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public void setItens(Set<ItemPedido> itens) {
+        this.itens = itens;
+    }
+    
+     public Set<Produto> getProdutos() {
+        Set<Produto> produtos = new HashSet<>();
+        for (ItemPedido ip : itens) {
+            produtos.add(ip.getProduto());
+        }
+        return produtos;
+    }
+
 
     @Override
     public int hashCode() {

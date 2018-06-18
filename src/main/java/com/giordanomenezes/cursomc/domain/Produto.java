@@ -9,8 +9,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +20,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -35,6 +38,9 @@ public class Produto implements Serializable {
     private String nome;
 
     private BigDecimal preco;
+    
+    @OneToMany(mappedBy = "id.produto")
+    private Set<ItemPedido> itensPedido = new HashSet<>();
     
     @JsonBackReference
     @ManyToMany
@@ -83,6 +89,22 @@ public class Produto implements Serializable {
         this.categorias = categorias;
     }
 
+    public Set<ItemPedido> getItensPedido() {
+        return itensPedido;
+    }
+
+    public void setItensPedido(Set<ItemPedido> itensPedido) {
+        this.itensPedido = itensPedido;
+    }
+
+    public Set<Pedido> getPedidos() {
+        Set<Pedido> pedidos = new HashSet<>();
+        for (ItemPedido ip : itensPedido) {
+            pedidos.add(ip.getPedido());
+        }
+        return pedidos;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;

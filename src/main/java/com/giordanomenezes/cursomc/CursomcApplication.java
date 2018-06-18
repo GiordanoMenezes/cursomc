@@ -5,6 +5,7 @@ import com.giordanomenezes.cursomc.domain.Cidade;
 import com.giordanomenezes.cursomc.domain.Cliente;
 import com.giordanomenezes.cursomc.domain.Endereco;
 import com.giordanomenezes.cursomc.domain.Estado;
+import com.giordanomenezes.cursomc.domain.ItemPedido;
 import com.giordanomenezes.cursomc.domain.Pagamento;
 import com.giordanomenezes.cursomc.domain.PagamentoComBoleto;
 import com.giordanomenezes.cursomc.domain.PagamentoComCartao;
@@ -102,18 +103,32 @@ public class CursomcApplication implements CommandLineRunner {
         cli1.getEnderecos().addAll(Arrays.asList(end1, end2));
 
         clienterepo.save(cli1);
-        
+
         //PEDIDOS E PAGAMENTOS
-        Pedido ped1 = new Pedido(LocalDateTime.of(2017,Month.SEPTEMBER,30,10,32), cli1, end1);
-        Pedido ped2 = new Pedido(LocalDateTime.of(2017,Month.OCTOBER,10,19,35), cli1, end2);
-        
+        Pedido ped1 = new Pedido(LocalDateTime.of(2017, Month.SEPTEMBER, 30, 10, 32), cli1, end1);
+        Pedido ped2 = new Pedido(LocalDateTime.of(2017, Month.OCTOBER, 10, 19, 35), cli1, end2);
+
         Pagamento pagto1 = new PagamentoComCartao(6, EstadoPagamento.QUIT, ped1);
-        Pagamento pagto2 = new PagamentoComBoleto(LocalDate.of(2017,Month.OCTOBER,20),null,EstadoPagamento.PEND,ped2);
-        
+        Pagamento pagto2 = new PagamentoComBoleto(LocalDate.of(2017, Month.OCTOBER, 20), null, EstadoPagamento.PEND, ped2);
+
         pedrepo.save(ped1);
         pedrepo.save(ped2);
         pagtorepo.save(pagto1);
         pagtorepo.save(pagto2);
 
+        //ITENS DE PEDIDO
+        ItemPedido ip1 = new ItemPedido(p1, ped1, BigDecimal.ZERO, 1, new BigDecimal(2000));
+        ItemPedido ip2 = new ItemPedido(p3, ped1, BigDecimal.ZERO, 2, new BigDecimal(80));
+        ItemPedido ip3 = new ItemPedido(p2, ped2, new BigDecimal(100), 1, new BigDecimal(800));
+
+        ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+        ped2.getItens().addAll(Arrays.asList(ip3));
+
+        p1.getItensPedido().addAll(Arrays.asList(ip1));
+        p2.getItensPedido().addAll(Arrays.asList(ip3));
+        p3.getItensPedido().addAll(Arrays.asList(ip2));
+
+        pedrepo.save(ped1);
+        pedrepo.save(ped2);
     }
 }
